@@ -1,0 +1,39 @@
+{
+  "include": [
+    "src/**/*",
+    "register.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "@types"
+  ],
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "es2016",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "module": "commonjs",
+    "rootDirs": [
+      "src",
+      "."
+    ],
+    "resolveJsonModule": true,
+    "outDir": "lib",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@shin1ohno/nuroon/*": [
+        "src/app/*"
+      ]
+    },
+    "typeRoots": [
+      "@types",
+      "node_modules/@types"
+    ]
+  }
+}

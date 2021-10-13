@@ -1,0 +1,30 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "../",
+    "module": "commonjs",
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "isolatedModules": false,
+    "strict": false,
+    "noImplicitAny": false,
+    "typeRoots": [
+      "../@types"
+    ],
+    "paths": {
+      "@shin1ohno/nuroon/test": [
+        "./test/utility/index.ts"
+      ],
+      "@shin1ohno/nuroon/*": [
+        "src/app/*"
+      ]
+    }
+  },
+  "exclude": [
+    "../node_modules",
+    "../@types"
+  ],
+  "include": [
+    "../register.ts"
+  ]
+}
