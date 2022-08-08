@@ -1,33 +1,27 @@
 import { DeviceDiscoveryManager, NuimoControlDevice } from "rocket-nuimo";
 import { Observable } from "rxjs";
-import MQTT, { AsyncClient } from "async-mqtt";
+import MQTT, { AsyncClient, AsyncMqttClient } from "async-mqtt";
 import pino from "pino";
 import { NuimoMQTT } from "./nuimo-mqtt";
+import { BrokerConfig } from "./broker-config";
 
 const logger = pino();
 
 class Bootstrap {
   static run(): void {
     Bootstrap.startNuimoDiscovery().subscribe((nuimo) => {
-      Bootstrap.setupMQTT().subscribe((mqtt) => {
+      Bootstrap.setupMQTT(BrokerConfig.fromEnv()).subscribe((mqtt) => {
         const nuimoMQTT = new NuimoMQTT(mqtt, nuimo);
         nuimo.connect().then(() => nuimoMQTT.subscribe());
       });
     });
   }
 
-  private static setupMQTT(): Observable<AsyncClient> {
-    const brokerUrl = "mqtts://dummy.mq.eu-west-2.amazonaws.com:8883";
-    const options = {
-      username: "dummy",
-      password: "dummy",
-    };
-
+  private static setupMQTT(config: BrokerConfig): Observable<AsyncMqttClient> {
     return new Observable<AsyncClient>((subscriber) => {
       const now = new Date();
-      MQTT.connectAsync(brokerUrl, options)
+      MQTT.connectAsync(config.url, config.options)
         .then((mqtt) => {
-          mqtt.publish("nuimo/last_connected_at", now.toJSON());
           logger.info(`Connected to MQTT Broker at ${now.toISOString()}`);
           subscriber.next(mqtt);
         })

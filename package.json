@@ -22,15 +22,17 @@
   "homepage": "https://github.com/shin1ohno/nuimo-mqtt#readme",
   "dependencies": {
     "async-mqtt": "^2.6.2",
+    "dotenv": "^16.0.1",
     "pino": "^7.3.0",
     "rocket-nuimo": "^1.2.1",
     "rxjs": "^7.4.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.4.0",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@testdeck/mocha": "^0.2.0",
     "@types/chai": "^4.2.22",
-    "@types/mocha": "^9.0.0",
+    "@types/mocha": "^9.1.1",
     "@types/node": "^16.11.9",
     "@types/pino": "^7.0.5",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
