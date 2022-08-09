@@ -13,8 +13,7 @@
     "ecmaVersion": 13,
     "sourceType": "module"
   },
-  "plugins": [
-  ],
+  "plugins": [],
   "rules": {
     "prettier/prettier": "error",
     "no-unused-vars": [
