@@ -10,7 +10,7 @@ const logger = pino();
 class Bootstrap {
   static run(): void {
     Bootstrap.startNuimoDiscovery().subscribe((nuimo) => {
-      Bootstrap.MQTTConnection(BrokerConfig.fromEnv()).subscribe((mqtt) => {
+      Bootstrap.MQTTConnection(BrokerConfig.fromEnv()).then((mqtt) => {
         nuimo.connect().then(() => new NuimoMQTT(mqtt, nuimo).subscribe());
       });
     });
@@ -18,25 +18,22 @@ class Bootstrap {
 
   private static MQTTConnection(
     config: BrokerConfig
-  ): Observable<AsyncMqttClient> {
-    return new Observable<AsyncClient>((subscriber) => {
-      const now = new Date();
-      MQTT.connectAsync(config.url, config.options)
-        .then((mqtt) => {
-          logger.info(`Connected to MQTT Broker at ${now.toISOString()}`);
-          subscriber.next(mqtt);
-        })
-        .catch((e) => subscriber.error(e));
+  ): Promise<AsyncMqttClient> {
+    return MQTT.connectAsync(config.url, config.options).then((mqtt) => {
+      logger.info(
+        `Connected to MQTT Broker(${config.url}) at ${new Date().toISOString()}`
+      );
+      return mqtt;
     });
   }
 
   private static startNuimoDiscovery(): Observable<NuimoControlDevice> {
-    const manager = DeviceDiscoveryManager.defaultManager;
-    manager.startDiscoverySession();
     return new Observable<NuimoControlDevice>((subscriber) => {
-      manager.on("device", (device, _) => {
-        subscriber.next(device);
-      });
+      DeviceDiscoveryManager.defaultManager
+        .startDiscoverySession()
+        .on("device", (device, _) => {
+          subscriber.next(device);
+        });
     });
   }
 }
