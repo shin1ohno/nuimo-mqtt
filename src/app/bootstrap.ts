@@ -1,6 +1,6 @@
 import { DeviceDiscoveryManager, NuimoControlDevice } from "rocket-nuimo";
 import { Observable } from "rxjs";
-import MQTT, { AsyncClient, AsyncMqttClient } from "async-mqtt";
+import MQTT, { AsyncMqttClient } from "async-mqtt";
 import pino from "pino";
 import { NuimoMQTT } from "./nuimo-mqtt";
 import { BrokerConfig } from "./broker-config";

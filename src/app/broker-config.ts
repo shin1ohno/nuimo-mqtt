@@ -1,10 +1,7 @@
 import dotenv from "dotenv";
 
 declare type BrokerOptions =
-  | {
-      username: string;
-      password: string;
-    }
+  | { username: string; password: string }
   | Record<string, never>;
 
 class BrokerConfig {
