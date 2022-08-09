@@ -10,14 +10,15 @@ const logger = pino();
 class Bootstrap {
   static run(): void {
     Bootstrap.startNuimoDiscovery().subscribe((nuimo) => {
-      Bootstrap.setupMQTT(BrokerConfig.fromEnv()).subscribe((mqtt) => {
-        const nuimoMQTT = new NuimoMQTT(mqtt, nuimo);
-        nuimo.connect().then(() => nuimoMQTT.subscribe());
+      Bootstrap.MQTTConnection(BrokerConfig.fromEnv()).subscribe((mqtt) => {
+        nuimo.connect().then(() => new NuimoMQTT(mqtt, nuimo).subscribe());
       });
     });
   }
 
-  private static setupMQTT(config: BrokerConfig): Observable<AsyncMqttClient> {
+  private static MQTTConnection(
+    config: BrokerConfig
+  ): Observable<AsyncMqttClient> {
     return new Observable<AsyncClient>((subscriber) => {
       const now = new Date();
       MQTT.connectAsync(config.url, config.options)
