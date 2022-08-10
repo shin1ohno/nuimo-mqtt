@@ -1,4 +1,8 @@
-import { DeviceDiscoveryManager, NuimoControlDevice } from "rocket-nuimo";
+import {
+  DeviceDiscoveryManager,
+  linkGlyph,
+  NuimoControlDevice,
+} from "rocket-nuimo";
 import { Observable } from "rxjs";
 import MQTT, { AsyncMqttClient } from "async-mqtt";
 import pino from "pino";
@@ -11,7 +15,10 @@ class Bootstrap {
   static run(): void {
     Bootstrap.startNuimoDiscovery().subscribe((nuimo) => {
       Bootstrap.MQTTConnection(BrokerConfig.fromEnv()).then((mqtt) => {
-        nuimo.connect().then(() => new NuimoMQTT(mqtt, nuimo).subscribe());
+        nuimo
+          .connect()
+          .then(() => new NuimoMQTT(mqtt, nuimo).subscribe())
+          .then(() => nuimo.displayGlyph(linkGlyph));
       });
     });
   }

@@ -1,9 +1,5 @@
 import { AsyncMqttClient } from "async-mqtt";
-import {
-  DisplayTransition,
-  NuimoControlDevice,
-  RotationMode,
-} from "rocket-nuimo";
+import { NuimoControlDevice, RotationMode } from "rocket-nuimo";
 import { controlGlyphs, volumeGlyphs } from "./glyphs";
 import { fromEvent } from "rxjs";
 import pino from "pino";
@@ -32,41 +28,27 @@ class NuimoMQTT {
 
     mqtt.subscribe(`${topicPath}/reaction`).then(() => {
       mqtt.on("message", (topic, payload) => {
+        let percentage;
         const p = JSON.parse(payload.toString());
         logger.info(topic);
         logger.info(JSON.stringify(p));
         switch (p.status) {
           case "playing":
-            nuimo.displayGlyph(controlGlyphs.playing);
-            break;
+            return nuimo.displayGlyph(controlGlyphs.playing);
           case "paused":
-            nuimo.displayGlyph(controlGlyphs.paused);
-            break;
+            return nuimo.displayGlyph(controlGlyphs.paused);
           case "volumeChange":
-            this.displayVolumeGlyph(p, nuimo);
-            break;
+            percentage = parseInt(p.percntage, 10);
+            if (Number.isNaN(percentage)) {
+              logger.error(`Unexpected percentage in payload: ${p.inspect}`);
+              percentage = 0;
+            }
+            return volumeGlyphs.display(percentage, nuimo);
           default:
             break;
         }
       });
     });
-  }
-
-  private displayVolumeGlyph(
-    payload: Record<"percentage", number>,
-    nuimo: NuimoControlDevice
-  ): void {
-    const i = Math.floor(payload.percentage / 10);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const g = volumeGlyphs[`volume${i}`];
-    if (g) {
-      nuimo.displayGlyph(g, {
-        timeoutMs: 1000,
-        transition: DisplayTransition.Immediate,
-        brightness: 1,
-      });
-    }
   }
 
   private exposeNuimoToMQTT(
@@ -84,26 +66,19 @@ class NuimoMQTT {
     const hoverSwipe = ["swipeLeft", "swipeRight"];
     const touch = ["touchTop", "touchLeft", "touchRight", "touchBottom"];
     const longTouch = ["longTouchLeft", "longTouchRight", "longTouchBottom"];
-    const every = [
-      hover,
-      rotate,
-      select,
-      swipe,
-      hoverSwipe,
-      touch,
-      longTouch,
-    ].flat();
-
-    every.flat().forEach((eventName) => {
-      fromEvent(nuimo, eventName).subscribe((e) => {
-        const ops = {
-          subject: eventName,
-          parameter: e,
-        };
-        logger.info(Object.assign({ nuimo: nuimo.id }, ops));
-        mqtt.publish(`${topicPath}/operation`, JSON.stringify(ops));
+    [hover, rotate, select, swipe, hoverSwipe, touch, longTouch]
+      .flat()
+      .forEach((eventName) => {
+        fromEvent(nuimo, eventName).subscribe((e) => {
+          const ops = {
+            subject: eventName,
+            parameter: e,
+          };
+          mqtt
+            .publish(`${topicPath}/operation`, JSON.stringify(ops))
+            .then(() => logger.info(Object.assign({ nuimo: nuimo.id }, ops)));
+        });
       });
-    });
   }
 }
 

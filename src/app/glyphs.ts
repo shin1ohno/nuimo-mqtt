@@ -1,4 +1,11 @@
-import { emptyGlyph, errorGlyph, Glyph, stopGlyph } from "rocket-nuimo";
+import {
+  DisplayTransition,
+  emptyGlyph,
+  errorGlyph,
+  Glyph,
+  NuimoControlDevice,
+  stopGlyph,
+} from "rocket-nuimo";
 
 const pauseGlyph = Glyph.fromString([
   "  ** **  ",
@@ -136,6 +143,22 @@ const volume9 = Glyph.fromString([
   "    *    ",
   "    *    ",
 ]);
+
+function displayVolumeGlyph(
+  percentage: number,
+  nuimo: NuimoControlDevice
+): Promise<NuimoControlDevice> {
+  type volumeIndex = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+  const i = <volumeIndex>Math.floor(percentage / 10);
+  return nuimo
+    .displayGlyph(volumeGlyphs[`volume${i}`], {
+      timeoutMs: 1000,
+      transition: DisplayTransition.Immediate,
+      brightness: 1,
+    })
+    .then(() => nuimo);
+}
+
 export const controlGlyphs: {
   playing: Glyph;
   paused: Glyph;
@@ -151,7 +174,12 @@ export const controlGlyphs: {
   next: rightGlyph,
   previous: leftGlyph,
 };
+
 export const volumeGlyphs: {
+  display: (
+    percentage: number,
+    nuimo: NuimoControlDevice
+  ) => Promise<NuimoControlDevice>;
   volume0: Glyph;
   volume1: Glyph;
   volume2: Glyph;
@@ -164,6 +192,7 @@ export const volumeGlyphs: {
   volume9: Glyph;
   volume10: Glyph;
 } = {
+  display: displayVolumeGlyph,
   volume0: emptyGlyph,
   volume1: volume1,
   volume2: volume2,
