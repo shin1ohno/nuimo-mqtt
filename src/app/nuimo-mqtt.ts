@@ -38,9 +38,11 @@ class NuimoMQTT {
           case "paused":
             return nuimo.displayGlyph(controlGlyphs.paused);
           case "volumeChange":
-            percentage = parseInt(p.percntage, 10);
+            percentage = parseInt(p.percentage, 10);
             if (Number.isNaN(percentage)) {
-              logger.error(`Unexpected percentage in payload: ${p.inspect}`);
+              logger.error(
+                `Unexpected percentage in payload: ${JSON.stringify(p)}`
+              );
               percentage = 0;
             }
             return volumeGlyphs.display(percentage, nuimo);
