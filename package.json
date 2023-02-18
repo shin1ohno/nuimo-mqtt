@@ -2,7 +2,7 @@
   "name": "nuimo-mqtt",
   "version": "1.0.0",
   "description": "Expose [Numio](https://www.senic.com/blogs/news/discontinuing-nuimo-products) to MQTT broker",
-  "main": "index.js",
+  "main": "./lib/src/index.js",
   "scripts": {
     "start": "npm run build:live",
     "build": "tsc -p .",

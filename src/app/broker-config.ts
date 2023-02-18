@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import * as process from "process";
 
 declare type BrokerOptions =
   | { username: string; password: string }

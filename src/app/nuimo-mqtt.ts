@@ -16,8 +16,9 @@ class NuimoMQTT {
   }
 
   subscribe(): void {
-    this.exposeNuimoToMQTT(this.nuimo, this.mqtt);
-    this.subscribeToMQTTEvents(this.mqtt, this.nuimo);
+    this.exposeNuimoToMQTT(this.nuimo, this.mqtt).then(() =>
+      this.subscribeToMQTTEvents(this.mqtt, this.nuimo)
+    );
   }
 
   private subscribeToMQTTEvents(
@@ -29,7 +30,10 @@ class NuimoMQTT {
     mqtt.subscribe(`${topicPath}/reaction`).then(() => {
       mqtt.on("message", (topic, payload) => {
         let percentage;
-        const p = JSON.parse(payload.toString());
+        const p: {
+          status: "playing" | "paused" | "volumeChange";
+          percentage: string;
+        } = JSON.parse(payload.toString());
         logger.info(topic);
         logger.info(JSON.stringify(p));
         switch (p.status) {
@@ -56,31 +60,32 @@ class NuimoMQTT {
   private exposeNuimoToMQTT(
     nuimo: NuimoControlDevice,
     mqtt: AsyncMqttClient
-  ): void {
+  ): Promise<void> {
     nuimo.rotationMode = RotationMode.Continuous;
-    mqtt.publish("nuimo/connected", nuimo.id);
-    const topicPath = `nuimo/${nuimo.id}`;
+    return mqtt.publish("nuimo/connected", nuimo.id).then(() => {
+      const topicPath = `nuimo/${nuimo.id}`;
 
-    const hover = ["hover"];
-    const rotate = ["rotate", "rotateLeft", "rotateRight"];
-    const select = ["select", "selectUp", "selectDown"];
-    const swipe = ["swipeUp", "swipeDown"];
-    const hoverSwipe = ["swipeLeft", "swipeRight"];
-    const touch = ["touchTop", "touchLeft", "touchRight", "touchBottom"];
-    const longTouch = ["longTouchLeft", "longTouchRight", "longTouchBottom"];
-    [hover, rotate, select, swipe, hoverSwipe, touch, longTouch]
-      .flat()
-      .forEach((eventName) => {
-        fromEvent(nuimo, eventName).subscribe((e) => {
-          const ops = {
-            subject: eventName,
-            parameter: e,
-          };
-          mqtt
-            .publish(`${topicPath}/operation`, JSON.stringify(ops))
-            .then(() => logger.info(Object.assign({ nuimo: nuimo.id }, ops)));
+      const hover = ["hover"];
+      const rotate = ["rotate", "rotateLeft", "rotateRight"];
+      const select = ["select", "selectUp", "selectDown"];
+      const swipe = ["swipeUp", "swipeDown"];
+      const hoverSwipe = ["swipeLeft", "swipeRight"];
+      const touch = ["touchTop", "touchLeft", "touchRight", "touchBottom"];
+      const longTouch = ["longTouchLeft", "longTouchRight", "longTouchBottom"];
+      [hover, rotate, select, swipe, hoverSwipe, touch, longTouch]
+        .flat()
+        .forEach((eventName) => {
+          fromEvent(nuimo, eventName).subscribe((e) => {
+            const ops = {
+              subject: eventName,
+              parameter: e,
+            };
+            mqtt
+              .publish(`${topicPath}/operation`, JSON.stringify(ops))
+              .then(() => logger.info(Object.assign({ nuimo: nuimo.id }, ops)));
+          });
         });
-      });
+    });
   }
 }
 
