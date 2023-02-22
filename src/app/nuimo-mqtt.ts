@@ -34,8 +34,7 @@ class NuimoMQTT {
           status: "playing" | "paused" | "volumeChange";
           percentage: string;
         } = JSON.parse(payload.toString());
-        logger.info(topic);
-        logger.info(JSON.stringify(p));
+
         switch (p.status) {
           case "playing":
             return nuimo.displayGlyph(controlGlyphs.playing);
