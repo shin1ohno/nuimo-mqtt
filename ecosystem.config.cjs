@@ -5,10 +5,12 @@ module.exports = {
       watch: '.',
       name: 'nuimo-mqtt',
       env_production: {
-        NODE_ENV: 'production'
+        NODE_ENV: 'production',
+        BROKER_URL: 'mqtt://mqbroker.home.local:1883'
       },
       env_development: {
-        NODE_ENV: 'development'
+        NODE_ENV: 'development',
+        BROKER_URL: 'mqtt://localhost:1883'
       }
     }
   ],
