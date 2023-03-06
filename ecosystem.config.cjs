@@ -20,7 +20,7 @@ module.exports = {
       repo: 'https://github.com/shin1ohno/nuimo-mqtt.git',
       path: '/Users/shin1ohno/Documents/work/nuimo-mqtt-production',
       'post-deploy':
-        'npm install && pm2 reload ecosystem.config.cjs --env production',
+        'npm install && rm -rf lib && npm run build && pm2 reload ecosystem.config.cjs --env production',
     },
   },
 }
