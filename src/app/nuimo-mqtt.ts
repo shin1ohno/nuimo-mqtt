@@ -90,9 +90,7 @@ class NuimoMQTT {
               }
               return volumeGlyphs.display(percentage, nuimo);
             default:
-              return nuimo
-                .displayGlyph(controlGlyphs.loading)
-                .then((_) => nuimo);
+              return nuimo.displayGlyph(emptyGlyph).then((_) => nuimo);
           }
         })
       );
