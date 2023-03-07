@@ -17,7 +17,7 @@ class NuimoMQTT {
 
   subscribe(): Promise<void> {
     const heartbeatObservable = interval(4000).pipe(
-      take((20 * 60) / 4000), //emit for 20 mins and then stop until next MQTT events
+      take((20 * 60 * 1000) / 4000), //emit for 20 mins and then stop until next MQTT events
       filter((_) => !!this.nuimo.rssi && !!this.nuimo.batteryLevel),
       tap((_) =>
         this.mqtt.publish(
