@@ -61,7 +61,7 @@ class NuimoMQTT {
         map(([_, payload]) => {
           let percentage;
           const p: {
-            status: "playing" | "paused" | "volumeChange";
+            status: "playing" | "paused" | "volumeChange" | "next" | "previous";
             percentage: string;
           } = JSON.parse(payload.toString());
 
@@ -73,6 +73,12 @@ class NuimoMQTT {
             case "paused":
               return nuimo
                 .displayGlyph(controlGlyphs.paused)
+                .then((_) => nuimo);
+            case "next":
+              return nuimo.displayGlyph(controlGlyphs.next).then((_) => nuimo);
+            case "previous":
+              return nuimo
+                .displayGlyph(controlGlyphs.previous)
                 .then((_) => nuimo);
             case "volumeChange":
               percentage = parseInt(p.percentage, 10);
