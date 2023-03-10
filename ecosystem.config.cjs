@@ -22,7 +22,7 @@ module.exports = {
       repo: 'https://github.com/shin1ohno/nuimo-mqtt.git',
       path: '/Users/shin1ohno/deploy/nuimo-mqtt-production',
       'post-deploy':
-        'export export PATH=$HOME/.volta/bin:$PATH && npm install && rm -rf lib && npm run build && /opt/homebrew/bin/pm2 reload ecosystem.config.cjs --env production',
+        'export PATH=$HOME/.volta/bin:$PATH && npm install && rm -rf lib && npm run build && /opt/homebrew/bin/pm2 reload ecosystem.config.cjs --env production',
     },
   },
 }
