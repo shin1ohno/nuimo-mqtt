@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      script: '/opt/homebrew/bin/node ./lib/src/index.js',
+      script: '$HOME/.volta/bin/node ./lib/src/index.js',
       watch: '.',
       name: 'nuimo-mqtt',
       env_production: {
@@ -20,9 +20,9 @@ module.exports = {
       host: 'mini.home.local',
       ref: 'origin/main',
       repo: 'https://github.com/shin1ohno/nuimo-mqtt.git',
-      path: '/Users/shin1ohno/Documents/work/nuimo-mqtt-production',
+      path: '/Users/shin1ohno/deploy/nuimo-mqtt-production',
       'post-deploy':
-        'export PATH=$HOME/bin:/usr/local/bin:/opt/homebrew/bin:$PATH && npm install && rm -rf lib && npm run build && pm2 reload ecosystem.config.cjs --env production',
+        'export export PATH=$HOME/.volta/bin:$PATH && npm install && rm -rf lib && npm run build && /opt/homebrew/bin/pm2 reload ecosystem.config.cjs --env production',
     },
   },
 }
