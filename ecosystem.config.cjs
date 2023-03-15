@@ -17,10 +17,10 @@ module.exports = {
   deploy: {
     production: {
       user: 'shin1ohno',
-      host: 'mini.home.local',
+      host: 'node-blue.home.local',
       ref: 'origin/main',
       repo: 'https://github.com/shin1ohno/nuimo-mqtt.git',
-      path: '/Users/shin1ohno/deploy/nuimo-mqtt-production',
+      path: '/home/shin1ohno/deploy/nuimo-mqtt-production',
       'post-deploy':
         'export PATH=$HOME/.volta/bin:$PATH && npm install && rm -rf lib && npm run build && pm2 reload ecosystem.config.cjs --env production',
     },
