@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      script: '$HOME/.volta/bin/node ./lib/src/index.js',
+      script: '$HOME/.volta/bin/node /home/shin1ohno/deploy/nuimo-mqtt-production/current/lib/src/index.js',
       watch: '.',
       name: 'nuimo-mqtt',
       env_production: {
