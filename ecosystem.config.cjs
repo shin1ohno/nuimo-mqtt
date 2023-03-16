@@ -16,7 +16,7 @@ module.exports = {
   ],
   deploy: {
     production: {
-      user: 'root', #bluetooth needs root access
+      user: 'root',
       host: 'node-blue.home.local',
       ref: 'origin/main',
       repo: 'https://github.com/shin1ohno/nuimo-mqtt.git',
