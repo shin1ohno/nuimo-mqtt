@@ -1,8 +1,8 @@
 module.exports = {
   apps: [
     {
-      script: '$HOME/.volta/bin/node /home/shin1ohno/deploy/nuimo-mqtt-production/current/lib/src/index.js',
-      watch: '/home/shin1ohno/deploy/nuimo-mqtt-production/current/',
+      script: '$HOME/.volta/bin/node $HOME/deploy/nuimo-mqtt-production/current/lib/src/index.js',
+      watch: '$HOME/deploy/nuimo-mqtt-production/current/',
       name: 'nuimo-mqtt',
       env_production: {
         NODE_ENV: 'production',
@@ -16,11 +16,11 @@ module.exports = {
   ],
   deploy: {
     production: {
-      user: 'shin1ohno',
+      user: 'root', #bluetooth needs root access
       host: 'node-blue.home.local',
       ref: 'origin/main',
       repo: 'https://github.com/shin1ohno/nuimo-mqtt.git',
-      path: '/home/shin1ohno/deploy/nuimo-mqtt-production',
+      path: '/root/deploy/nuimo-mqtt-production',
       'post-deploy':
         'export PATH=$HOME/.volta/bin:$PATH && npm install && rm -rf lib && npm run build && pm2 reload ecosystem.config.cjs --env production',
     },
