@@ -17,7 +17,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'root',
-      host: 'node-blue.home.local',
+      host: 'debmini.home.local',
       ref: 'origin/main',
       repo: 'https://github.com/shin1ohno/nuimo-mqtt.git',
       path: '/root/deploy/nuimo-mqtt-production',
