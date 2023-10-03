@@ -24,6 +24,7 @@
     "async-mqtt": "^2.6.2",
     "dotenv": "^16.0.1",
     "pino": "^7.3.0",
+    "postject": "^1.0.0-alpha.5",
     "rocket-nuimo": "^1.2.1",
     "rxjs": "^7.4.0"
   },
