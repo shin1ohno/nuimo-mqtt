@@ -6,7 +6,7 @@ module.exports = {
       name: 'nuimo-mqtt',
       env_production: {
         NODE_ENV: 'production',
-        BROKER_URL: 'mqtt://mqbroker.home.local:1883'
+        BROKER_URL: 'mqtt://pro.home.local:1883'
       },
       env_development: {
         NODE_ENV: 'development',
@@ -17,7 +17,7 @@ module.exports = {
   deploy: {
     production: {
       user: 'root',
-      host: 'debmini.home.local',
+      host: 'pro.home.local',
       ref: 'origin/main',
       repo: 'https://github.com/shin1ohno/nuimo-mqtt.git',
       path: '/root/deploy/nuimo-mqtt-production',
